@@ -1,0 +1,138 @@
+\documentclass[10pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{amssymb,amsfonts,amsmath,amsthm,amscd,mathtext}
+
+\usepackage[a4paper]{geometry} 
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+
+\sloppy
+\clubpenalty=10000
+\widowpenalty=10000
+
+%%% оформление заголовков глав, секций и подсекций
+
+\usepackage{titlesec}
+
+\makeatletter
+  \renewcommand{\section}{\@startsection{section}{1}{5.5ex}{-3.5ex plus -1ex minus -.2ex}{2.3ex plus.2ex}{\raggedright\hyphenpenalty=10000\normalfont\bfseries}}
+\makeatother
+
+\usepackage{indentfirst}      % красная строка
+\setlength{\parindent}{5.5ex} % 5 символов
+
+%%% biblatex
+
+\usepackage{csquotes} % recommended by pdflatex
+\usepackage[%
+    backend = biber,
+    style = authoryear-icomp,
+    autocite = inline,
+    singletitle = false,
+    autolang = other,
+    defernumbers = true,
+    sortlocale = en
+]{biblatex}
+\addbibresource{bibliography.bib}
+
+%\defbibenvironment{bibliography}
+%{\enumerate{}
+%{\setlength{\leftmargin}{\bibhang}%
+%\setlength{\itemindent}{-\leftmargin}%
+%\setlength{\itemsep}{\bibitemsep}%
+%\setlength{\parsep}{\bibparsep}}}
+%{\endenumerate}
+%{\item}
+
+\usepackage{hyperref}
+\hypersetup{%
+    colorlinks = false
+}
+
+%%% math env
+
+\newtheoremstyle{example-style}% name
+{5pt}  % space above 
+{5pt}  % space below 
+{}     % body font
+{\parindent}  % indent 
+{\bfseries}  % theorem head font
+{.}  % punctuation after theorem head
+{.5em}  % space after theorem head 
+{}  % theorem head spec (can be left empty, meaning 'normal')
+
+\theoremstyle{example-style}
+\newtheorem{example}{Пример}
+
+%%% linguistic stuff
+
+% Gentzen style natural deduction proof trees
+\usepackage{bussproofs}
+\usepackage{latexsym}
+
+\usepackage{tikz}
+\usepackage{tikz-qtree,tikz-qtree-compat}   % regular trees (e.g. GB style)
+\usepackage{tikz-dependency}                % dependency trees (bracket style)
+\usetikzlibrary{matrix,arrows}              % for commutative diagrams
+
+\usepackage{linguex}     % numbered linguistic examples and glosses
+\usepackage{cmll}        % linear logic
+
+\begin{document} 
+
+\title{Анализ текстов на естественном языке}
+\author{\textit{Константин Соколов} \smallskip \\ {\small Санкт-Петербургский Политехнический Университет Петра Великого} \smallskip \\ {\small \texttt{sokolov@dcn.icc.spbstu.ru}}}
+\date{}
+
+\maketitle
+
+\section{Обзор серии}
+
+Часть 1 -- Наблюдения, заставляющие предполагать наличие нетривиальной структуры в множестве векторных репрезентаций слов. Известные попытки объяснений (С. Арора и др.)
+
+Часть 2 -- Структура векторных репрезентаций слов как модель формального синтаксиса.
+
+Часть 3 -- Метод анализа на основе FCA и его связь с фазовой семантикой (соответствие Галуа); другие количественные и качественные методы оценки векторных репрезентаций; результаты.
+
+Часть 4 -- Теоретические и практические следствия: как объяснить то, что уже известно о структуре векторных репрезентаций; какие возможны приложения к синтаксическому анализу, грамматической семантике и пр.
+
+
+\section{Разрозненные факты и наблюдения}
+
+\begin{itemize}
+  \item Многие классы задач могут решаться с помощью векторных репрезентаций одинаковым образом (напр., синонимы, антонимы, аналогия, ассоциации), что допускает некоторый общий механизм реализации большого числа семантических отношений~\autocite{turney2008uniform}
+  \item задачи на аналогию решаются с помощью векторной арифметики для векторных репрезентаций разного происхождения (как полученных с помощью машинного обучения, так и с помощью прямых подсчетов совместной встречаемости, PMI и т.п.)
+  \item для разных типов отношений/противопоставлений влияние размера контекстного окна и размерности векторов различно; можно обнаружить ``точки насыщения'' -- предположения о разном объеме необходимой информации для разных типов отношений, соответственно, разные виды семантических оппозиций требуют разной размерности~\autocite{gladkova2016analogy}
+  \item Предположения о существовании линейных подпространств в связи с синонимией (в задаче оценки семантической близости)
+  \item Предположения о существовании линейных подпространств в связи с частями речи (POS tagging), морфологией~\autocite{cotterell2015morphological, soricut2015unsupervised}
+  \item Предположения о смысловой нагрузке ориентации векторов и подпространств в связи с семантическими оппозициями (антонимия, гиперо-гипонимические отношения)
+  \item Предположения о смысловой нагрузке ориентации векторов и подпространств в связи с грамматическими опозициями (sg/pl и т.п.) -- Japanese?
+  \item Пересечения подпространств в связи с полисемией, Polysemous Intersection Hypothesis (The context subspaces of a polysemous word intersect at  different directions for  different senses.)~\autocite{mu2016geometry, mu2017representing}
+  \item Пересечения подпространств в связи с омонимией (\textit{такой} -- ж.р. д.п. или м.р. им.п.?)
+  \item Предположения о существовании атомарных значений (не реализуемых в виде отдельных словоформ) и механизме суперпозиции векторов -- компонентная лексическая семантика~\autocite{arora2016linear}
+  \item Подпространства в связи с композицией значений (подпространства предложений)~\autocite{mu2017representing}
+  \item ``алгебраические'' операции над векторами в задаче аналогии (king - man + woman = queen)
+  \item ``mixture models'' of semantic composition based on vector addition is not simply possible, but also rather competitive when compared to "function application" methods \autocite{mitchell2010composition}; попытки объяснения~\autocite{tian2017mechanism}
+  \item Методы семантической композиции, основанные на проекциях (снова подпространства) \autocite{tsubaki2013modeling, tsubaki2016non}
+  \item projection towards isotropy \autocite{arora2016latent}
+  \item geometry of compositionality \autocite{gong2017geometry}
+  \item представления контекстов подпространствами (в т.ч. их аппроксимация с помощью PCA)
+  \item представление концептов ``областями'' в связи с полисемией \autocite{erk2009representing}, гиперо-гипонимическими отношениями \autocite{erk2009supporting}
+  \item direction is meaning, norm is frequency of occurence \autocite{schnabel2015evaluation, wilson2015controlled}, s. a. \texttt{http://building-babylon.net/2015/11/04/does-vector-direction-encode-word-frequency/}
+  \item unsupervised post-processing techniques (normalization, dimensionality reduction) boost effectivеness
+  \item векторые репрезентации сохраняют грамматическую информацию -- в связи с согласованием в парсерах на основе нейросетей и NMT
+  \item SEMCAT \autocite{lutfi2017semantic}
+\end{itemize}
+
+\section{Известные попытки объяснений. Модель С. Ароры}
+
+TODO
+
+
+
+%\nocite{*}
+\printbibliography[resetnumbers=true]
+
+\end{document}
